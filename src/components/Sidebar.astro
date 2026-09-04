@@ -1,0 +1,137 @@
+---
+// Sidebar — extraído y mejorado de Header.astro
+// Estilo botones verticales tipo docs.franco-lamas.com.ar
+// Font Awesome: https://fontawesome.com/
+
+const currentPath = Astro.url.pathname;
+const isActive = (path: string) => currentPath === path ? 'active' : '';
+---
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-container">
+    <!-- Perfil con foto -->
+    <div class="sidebar-profile">
+      <a href="/about" aria-label="Acerca de Franco Lamas" class="sidebar-profile-picture-link">
+        <img
+          class="sidebar-profile-picture"
+          src="https://www.gravatar.com/avatar/04e9cf11ac7b9f0cfaa1fbfe8d0f72ea?s=110"
+          alt="Foto de Franco Lamas"
+          width="110"
+          height="110"
+        />
+      </a>
+      <h4 class="sidebar-profile-name">Franco Lamas</h4>
+      <h5 class="sidebar-profile-bio">Tecnología por naturaleza.</h5>
+    </div>
+
+    <!-- Botones de navegación verticales -->
+    <ul class="sidebar-buttons">
+      <li class="sidebar-button">
+        <a class={`sidebar-button-link ${isActive('/')}`} href="/" title="Inicio">
+          <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">Inicio</span>
+        </a>
+      </li>
+      <li class="sidebar-button">
+        <a class={`sidebar-button-link ${isActive('/categories')}`} href="/categories" title="Categorías">
+          <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">Categorías</span>
+        </a>
+      </li>
+      <li class="sidebar-button">
+        <a class={`sidebar-button-link ${isActive('/tags')}`} href="/tags" title="Etiquetas">
+          <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">Etiquetas</span>
+        </a>
+      </li>
+      <li class="sidebar-button">
+        <a class={`sidebar-button-link ${isActive('/archives')}`} href="/archives" title="Archivos">
+          <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">Archivos</span>
+        </a>
+      </li>
+      <li class="sidebar-button">
+        <a class={`sidebar-button-link ${isActive('/about')}`} href="/about" title="Acerca de">
+          <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">Acerca de</span>
+        </a>
+      </li>
+      <li class="sidebar-button">
+        <a class="sidebar-button-link" href="https://github.com/franco-lamas" title="GitHub" target="_blank" rel="noopener">
+          <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">GitHub</span>
+        </a>
+      </li>
+      <li class="sidebar-button">
+        <a class="sidebar-button-link" href="https://www.linkedin.com/in/franco-lamas/" title="LinkedIn" target="_blank" rel="noopener">
+          <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+          <span class="sidebar-button-desc">LinkedIn</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Toggle de tema -->
+  <div class="sidebar-theme">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+      <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <span class="theme-label">Cambiar tema</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Botón cerrar sidebar (mobile) -->
+<button class="sidebar-close" id="sidebar-close" aria-label="Cerrar menú">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+</button>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const closeBtn = document.getElementById('sidebar-close');
+  const themeBtn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  // Theme toggle
+  const saved = localStorage.getItem('theme') || 'dark';
+  root.setAttribute('data-theme', saved);
+
+  themeBtn.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  // Mobile sidebar close
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target as Node) && !closeBtn.contains(e.target as Node)) {
+      sidebar.classList.remove('open');
+    }
+  });
+</script>
+
+<style>
+  .icon-moon { display: none; }
+  [data-theme='dark'] .icon-sun { display: none; }
+  [data-theme='dark'] .icon-moon { display: inline; }
+</style>

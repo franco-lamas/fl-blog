@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const years = [...new Set(posts.map(p => p.data.pubDate.getFullYear()))]
+    .sort((a, b) => b - a);
+  return years.map(year => ({
+    params: { year: year.toString() },
+    props: { year },
+  }));
+}
+
+const { year } = Astro.props;
+const yearPosts = (await getCollection('blog'))
+  .filter(p => p.data.pubDate.getFullYear() === year)
+  .sort((a, b) => +b.data.pubDate - +a.data.pubDate);
+---
+
+<BaseLayout title={`Archivo ${year} — Franco Lamas`} description={`Posts publicados en ${year}`}>
+  <Sidebar />
+  <div class="main-wrap">
+    <main class="container">
+      <header class="page-header">
+        <h1>Archivo {year}</h1>
+        <p class="text-muted">{yearPosts.length} posts</p>
+      </header>
+      <section class="post-list">
+        {yearPosts.map((post) => (
+          <article class="post-card">
+            <a href={`/blog/${post.id}`} class="post-card-link">
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              <ul class="tag-list">
+                {post.data.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+            </a>
+          </article>
+        ))}
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .page-header h1 {
+    font-size: 1.6rem;
+    margin: 0 0 0.4rem;
+    color: var(--text-heading);
+  }
+  .text-muted {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 300;
+    margin: 0;
+  }
+  .post-list {
+    padding: 0;
+  }
+  .post-card {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-card:last-child {
+    border-bottom: none;
+  }
+  .post-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .post-card time {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .post-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+    color: var(--text-heading);
+    line-height: 1.3;
+  }
+  .post-card:hover h2 {
+    color: var(--accent);
+  }
+  .post-card p {
+    color: var(--text-muted);
+    margin: 0 0 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tag-list li {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: rgba(52, 158, 243, 0.1);
+    color: var(--accent);
+    padding: 0.08rem 0.5rem;
+    border-radius: 3px;
+  }
+</style>
