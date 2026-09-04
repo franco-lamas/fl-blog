@@ -48,7 +48,7 @@ body {
   font-weight: 400;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.7;
+  line-height: 1.9;
 }
 
 a {
@@ -356,17 +356,35 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
 }
 
-.prose h2 {
-  margin-top: 2.5rem;
-  font-size: 1.4rem;
-  font-weight: 600;
+.prose p {
+  margin: 0 0 1.5em 0;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+  margin: 1em 0 1em 0;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  line-height: 1.45;
   color: var(--text-heading);
 }
 
+.prose h2 {
+  font-size: 1.4rem;
+}
+
 .prose h3 {
-  margin-top: 2rem;
   font-size: 1.2rem;
-  font-weight: 600;
+}
+
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin: 1em 0 0.5em 0;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  line-height: 1.45;
   color: var(--text-heading);
 }
 
@@ -402,7 +420,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .prose blockquote {
   border-left: 3px solid var(--accent);
-  margin-left: 0;
+  margin: 1.5em 0 0;
   padding: 0.5rem 1rem;
   background: rgba(52, 158, 243, 0.05);
   border-radius: 0 4px 4px 0;
@@ -413,7 +431,8 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 4px;
 }
 
-.prose ul, .prose ol {
+.prose ul, .prose ol, .prose dl {
+  margin: 0 0 0.5em 0;
   padding-left: 1.5rem;
 }
 
