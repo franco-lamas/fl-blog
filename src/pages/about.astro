@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Sobre mí" description="Franco Lamas - Acerca de.">
+  <Header />
+  <div class="main-wrap">
+    <main class="container">
+      <article class="post">
+        <header class="post-header">
+          <h1>Acerca de</h1>
+        </header>
+        <div class="post-content prose">
+          <p>
+            Soy Franco Lamas, argentino, apasionado por la tecnología.
+            Trabajo con desarrollo de software, automatización y análisis de datos.
+          </p>
+          <p>
+            Este blog es mi espacio para documentar lo que aprendo, compartir guías
+            técnicas y registrar proyectos personales.
+          </p>
+
+          <h2>Cómo funciona este sitio</h2>
+          <p>
+            Construido con Astro, desplegado en Cloudflare Pages, escrito en Markdown.
+            Cada post se valida con Zod en build time.
+          </p>
+          <pre><code>Markdown → Astro → GitHub → Cloudflare Pages</code></pre>
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

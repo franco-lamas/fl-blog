@@ -1,0 +1,53 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, author, tags } = post.data;
+const { Content } = await render(post);
+
+const formattedDate = pubDate.toLocaleDateString('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const formattedUpdated = updatedDate?.toLocaleDateString('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <ThemeToggle />
+  <main class="container">
+    <article class="post">
+      <header class="post-header">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <h1>{title}</h1>
+        <p class="post-meta">
+          Por {author}
+          {updatedDate && <span> · Actualizado: {formattedUpdated}</span>}
+        </p>
+        <ul class="tag-list">
+          {tags.map((tag) => (
+            <li><a href={`/tags/${tag.toLowerCase()}`}>#{tag}</a></li>
+          ))}
+        </ul>
+      </header>
+      <div class="post-content prose">
+        <Content />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
